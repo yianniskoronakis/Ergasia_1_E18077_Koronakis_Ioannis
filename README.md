@@ -22,7 +22,9 @@
 
 Αρχικά στην συνθήκη μίας δομής επιλογής 'users.find_one({'username': data['username'],'password': data['password']})' ψάχνουμε μέσα στο collection 'users' 'username' και 'password' τα οποία έχουν δωθεί απο τον χρήστη 'data'.
 
-Στην περίπτωση που βρεθούν καλούμε την συνάρτηση 'user_uuid=str(create_session(data["username"]))' με παράμετρο το 'username' που εισήγαγε ο χρήστης σε μορφή χαρακτήρων και την αποθυκεύουμε σε μία μεταβλητή 'user_uuid'. Ώς αποτέλσμα  μέσα στην μεταβλητή 'user_uuid' να υπάρχει ο id κωδικός που θα χρησιμοποιηθεί για το authorization. Αυτή η μεταβλητή πήρε την τιμής της απο την συνάρτηση 'create_session()'. Έπειτα εισγχωρεί στην μεταβλητή
+Στην περίπτωση που βρεθούν καλούμε την συνάρτηση 'user_uuid=str(create_session(data["username"]))' με παράμετρο το 'username' που εισήγαγε ο χρήστης σε μορφή χαρακτήρων και την αποθυκεύουμε σε μία μεταβλητή 'user_uuid'. Ώς αποτέλσμα  μέσα στην μεταβλητή 'user_uuid' να υπάρχει ο id κωδικός που θα χρησιμοποιηθεί για το authorization. Αυτή η μεταβλητή πήρε την τιμής της απο την συνάρτηση 'create_session()'. Έπειτα εισγχωρεί στην μεταβλητή 'res' τα δεδομένα του 'uuid' και του 'username'. Τέλος γυρνάει τα δεδομένα αυτά μέσο της μεταβλητής 'res'.
+
+Διαφορετικά γυρνάει ένα μήνυμα λάθους.
 
     if users.find_one({'username': data['username'],'password': data['password']}): 
         user_uuid=str(create_session(data["username"]))
@@ -30,6 +32,14 @@
         return Response(json.dumps(res), status=200,mimetype='application/json') 
     else:
         return Response("Wrong username or password.",status=400,mimetype='application/json') 
+        
+Τα δεδομένα του χρήστη δίνονται με την μορφή:
+
+    {
+        "username": "some username", 
+        "password": "a very secure password"
+    }
+
 #Endpoint 3
 
 #Endpoint 4
