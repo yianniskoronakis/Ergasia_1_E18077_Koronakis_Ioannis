@@ -42,6 +42,25 @@
 
 #Endpoint 3
 
+Αρχικά πέρνουμε σε μια μεταβλητή 'uuid' το αποτέλεσμα της συνάρτησης 'request.headers.get('authorization')' με παράμετρο ''authorization'' όπου ουσιαστικά πέρνει τον κωδικό id του χρήστη που έχει δημιουργηθεί απο το 'login'. Έπειτα μέσα σε μία δομή επιλογής και μέσα απο την συνάρτηση 'is_session_valid(uuid)' με παράμετρο την μεταβλητή 'uuid' επαληθεύει τον 'user'. Στην περίπτωση που δεν επαληθευτεί γυρνάει μήνυμα λάθους. Διαφορετικά ελέγχει σε μία άλλη δομή επιλογής άμα το 'email' που έχει δώσει ο 'user' υπάρχει μέσα στο collection Students. Στην περίπτωση που υπάρχει περνάει σε μία μεταβλητη 'x' τα δεδομένα του φοιτητή που βρέθηκε, έπειτα με βάση αυτή την μεταβλητή εισγχωρεί όλα τα keys και τις τιμές του συγκεκριμένου φοιτητή στο student και τα επιστρέφει διαφορετικά γυρνάει μήνυμα λάθους.
+
+    uuid = request.headers.get('authorization')
+    if not(is_session_valid(uuid)):    
+        return Response("Student doesn't exist",status=401,mimetype="application/json")
+    else:
+        if Students.find_one({'email': data['email']}):
+            x=Students.find_one({'email': data['email']})
+            student ={"_id": str(x["_id"]),"name": x["name"],"email": x["email"],"yearOfBirth": x["yearOfBirth"],"address":x["address"]}
+            return Response(json.dumps(student), status=200, mimetype='application/json')
+        else:
+            return Response("There isn't student with this email", mimetype='application/json')
+            
+ Τα δεδομένα του χρήστη δίνονται με την μορφή:
+ 
+    {
+        "email":"email που θέλουμε να ψάξουμε"
+    }
+
 #Endpoint 4
 
 #Endpoint 5
