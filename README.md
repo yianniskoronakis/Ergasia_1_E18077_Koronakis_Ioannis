@@ -149,18 +149,17 @@
 
 #Endpoint 8
 
-Αρχικά πέρνουμε σε μια μεταβλητή 'uuid' το αποτέλεσμα της συνάρτησης 'request.headers.get('authorization')' με παράμετρο ''authorization'' όπου ουσιαστικά πέρνει τον κωδικό του authorization που έχει δημιουργηθεί απο το 'login'. Έπειτα μέσα σε μία δομή επιλογής και μέσα απο την συνάρτηση 'is_session_valid(uuid)' με παράμετρο την μεταβλητή 'uuid' επαληθεύει τον 'user'. Στην περίπτωση που δεν επαληθευτεί γυρνάει μήνυμα λάθους.
+Αρχικά πέρνουμε σε μια μεταβλητή 'uuid' το αποτέλεσμα της συνάρτησης 'request.headers.get('authorization')' με παράμετρο ''authorization'' όπου ουσιαστικά πέρνει τον κωδικό του authorization που έχει δημιουργηθεί απο το 'login'. Έπειτα μέσα σε μία δομή επιλογής και μέσα απο την συνάρτηση 'is_session_valid(uuid)' με παράμετρο την μεταβλητή 'uuid' επαληθεύει τον 'user'. Στην περίπτωση που δεν επαληθευτεί γυρνάει μήνυμα λάθους. Βρίσκει άμα υπάρχει στο collection Students το email και τροποποιεί τα δεδομένα εισάγοντας courses διαφορετικά γυρνάει μήνυμα λάθους.
 
     uuid = request.headers.get('authorization')
     if is_session_valid(uuid):
         if Students.find_one({'email': data["email"]}):
-           # courses.insert_one({'email': data["email"], 'courses':data["courses"]})
-           db.Students.find_and_modify({'email': data["email"]},{"$set" :{'email': data["email"], 'courses':data["courses"]}})
+           db.Students.find_and_modify({'email': data["email"]},{"$set" :{'email': data["email"], 'courses':data["courses"]}})             
+            msg="authorization succeed"
+            return Response(msg, status=200, mimetype='application/json')
         else:
             msg="There isn't this email"
             return Response(msg, mimetype='application/json')
-        msg="authorization succeed"
-        return Response(msg, status=200, mimetype='application/json')
     else:
         msg="authorization failed"
         return Response(msg, status=401, mimetype='application/json')
@@ -178,7 +177,7 @@
         } 
 #Endpoint 9
 
-Αρχικά πέρνουμε σε μια μεταβλητή 'uuid' το αποτέλεσμα της συνάρτησης 'request.headers.get('authorization')' με παράμετρο ''authorization'' όπου ουσιαστικά πέρνει τον κωδικό του authorization που έχει δημιουργηθεί απο το 'login'. Έπειτα μέσα σε μία δομή επιλογής και μέσα απο την συνάρτηση 'is_session_valid(uuid)' με παράμετρο την μεταβλητή 'uuid' επαληθεύει τον 'user'. Στην περίπτωση που δεν επαληθευτεί γυρνάει μήνυμα λάθους.
+Αρχικά πέρνουμε σε μια μεταβλητή 'uuid' το αποτέλεσμα της συνάρτησης 'request.headers.get('authorization')' με παράμετρο ''authorization'' όπου ουσιαστικά πέρνει τον κωδικό του authorization που έχει δημιουργηθεί απο το 'login'. Έπειτα μέσα σε μία δομή επιλογής και μέσα απο την συνάρτηση 'is_session_valid(uuid)' με παράμετρο την μεταβλητή 'uuid' επαληθεύει τον 'user'. Στην περίπτωση που δεν επαληθευτεί γυρνάει μήνυμα λάθους. Ελέγχει άμα υπαρχει το email που εισήγαγε ο χρήστης και το εισάγει στην student στην περίπτωση που είναι ο βαθμός πάνω απο 5 και γίνεται και εισαγωγή στη name ώστε να γυρνάει μέσο της msg τα δεδομένα. Σε διαφορετική περίπτωση θα γυρίζει μήνυμα λάθους. 
 
     uuid = request.headers.get('authorization')
     if is_session_valid(uuid):
